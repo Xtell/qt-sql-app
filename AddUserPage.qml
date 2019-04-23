@@ -5,6 +5,8 @@ import MySQLProvider 1.0
 Page {
     id: addUserView
     property MySQLProvider mySqlProvider
+    property string connectionName
+    property int dbType
     title: "Добавление пользователя"
     ColumnLayout {
         anchors.fill: parent
@@ -44,13 +46,13 @@ Page {
             onClicked: {
                 var insertString = "INSERT INTO Users (FIO, reg_date, ID) VALUES ("
                 insertString += "'" + fio.text + "'" + ", "
-                insertString += "str_to_date('" + date.text + "', '%d.%m.%Y')" + ", "
+                insertString += "'" + date.text + "'" + ", "
                 insertString += idUser.text + ")"
                 var selectString = "SELECT FIO, reg_date, ID FROM Users WHERE "
                 selectString += "FIO = '" + fio.text + "' AND "
-                selectString += "reg_date = str_to_date('" + date.text + "', '%d.%m.%Y') AND "
+                selectString += "reg_date = '" + date.text + "' AND "
                 selectString += "ID = " + idUser.text
-                mySqlProvider.connect(connectionName)
+                mySqlProvider.connect(dbType,connectionName)
                 var countString = mySqlProvider.execSelectSqlQuery(selectString, connectionName)
                 if (countString === 0)
                     mySqlProvider.execInsertSqlQuery(insertString, connectionName)

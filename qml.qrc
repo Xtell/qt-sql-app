@@ -6,5 +6,6 @@
         <file>UpdateUserPage.qml</file>
         <file>TestUsersModel.qml</file>
         <file>CalendarDialog.qml</file>
+        <file>CreateTablePage.qml</file>
     </qresource>
 </RCC>

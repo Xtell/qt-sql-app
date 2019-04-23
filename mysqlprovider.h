@@ -12,8 +12,13 @@ class MySQLProvider : public QObject
     Q_PROPERTY(QString dbName READ dbName WRITE setDbName NOTIFY dbNameChanged)
     Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_ENUMS(eDbType)
 public:
     MySQLProvider();
+    enum eDbType {
+        DB_TYPE_MYSQL = 0,
+        DB_TYPE_SQLITE = 1
+    };
 
     QString hostname() const;
     void setHostname(const QString &hostname);
@@ -34,8 +39,9 @@ signals:
     void passwordChanged();
 
 public slots:
-    QString connect(QString connectionName);
+    QString connect(eDbType type,QString connectionName);
     void disconnect(QString connectionName);
+    void createTable(QString query, QString connectionName);
     int execSelectSqlQuery(QString query, QString connectionName);
     void execInsertSqlQuery(QString query, QString connectionName);
     void execUpdateSqlQuery(QString query, QString connectionName);

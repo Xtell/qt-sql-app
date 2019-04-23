@@ -6,16 +6,17 @@ import MySQLProvider 1.0
 
 
 ApplicationWindow {
+    id: mainWindow
     visible: true
     width: 640
     height: 480
     title: qsTr("Hello World")
 
     property string connectionName: "MyConnection"
-
+    property int dbType: MySQLProvider.DB_TYPE_SQLITE
     MySQLProvider {
         id: mySqlProvider
-        dbName: "gfgdf"
+        dbName: "gfgdf.sqlite"
         hostname: "remotemysql.com"
         port: 3306
         login: "gfdgf"
@@ -43,18 +44,18 @@ ApplicationWindow {
 
         Component.onCompleted: {
             if (currentIndex === 0) {
-                var selectString = "SELECT FIO, reg_date, ID FROM Users"
-                mySqlProvider.connect(connectionName)
-                tableContent.model = mySqlProvider.getUsers(selectString, connectionName)
+
+                mySqlProvider.connect(dbType,connectionName)
+                userPage.model = mySqlProvider.getUsers(connectionName)
                 mySqlProvider.disconnect(connectionName)
             }
         }
 
         onCurrentIndexChanged: {
             if (currentIndex === 0) {
-                var selectString = "SELECT FIO, reg_date, ID FROM Users"
-                mySqlProvider.connect(connectionName)
-                tableContent.model = mySqlProvider.getUsers(selectString, connectionName)
+
+                mySqlProvider.connect(dbType,connectionName)
+                userPage.model = mySqlProvider.getUsers(connectionName)
                 mySqlProvider.disconnect(connectionName)
             }
         }
@@ -75,10 +76,19 @@ ApplicationWindow {
 
             id: addUserPage
             mySqlProvider: mySqlProvider
+            connectionName: mainWindow.connectionName
+            dbType: mainWindow.dbType
         }
         UpdateUserPage {
            id: updateUserPage
            mySqlProvider: mySqlProvider
+        }
+
+        CreateTablePage{
+            id: createTablePage
+            mySqlProvider: mySqlProvider
+            connectionName: mainWindow.connectionName
+            dbType: mainWindow.dbType
         }
 
     }

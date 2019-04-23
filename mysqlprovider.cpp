@@ -73,9 +73,22 @@ void MySQLProvider::setPassword(const QString &password)
     }
 }
 
-QString MySQLProvider::connect(QString connectionName)
+QString MySQLProvider::connect(eDbType type, QString connectionName)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    QString driverName;
+    switch (type) {
+    case DB_TYPE_MYSQL:
+        driverName = "QMYSQL";
+        break;
+    case DB_TYPE_SQLITE:
+        driverName = "QSQLITE";
+        break;
+    default:
+        qDebug() << "Error: Unknowofdsf";
+        return QString();
+
+    }
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     db.setHostName(m_hostname);
     db.setPort(m_port);
     db.setUserName(m_login);
@@ -95,6 +108,15 @@ void MySQLProvider::disconnect(QString connectionName)
         db.close();
     }
     QSqlDatabase::removeDatabase(connectionName);
+}
+
+void MySQLProvider::createTable(QString query, QString connectionName)
+{
+    QSqlQuery sqlQuery(QSqlDatabase::database(connectionName));
+    if (!sqlQuery.exec(query)) {
+        qDebug() << "Query exec error:" << sqlQuery.lastError().text();
+        qDebug() << "Query:" << query;
+    }
 }
 
 int MySQLProvider::execSelectSqlQuery(QString query, QString connectionName)
@@ -163,7 +185,7 @@ void MySQLProvider::execUpdateSqlQuery(QString query, QString connectionName)
 QList<QObject *> MySQLProvider::getUsers(QString connectionName)
 {
     QSqlQuery sqlQuery(QSqlDatabase::database(connectionName));
-    if (!sqlQuery.exec("SELECT FIO, DATE, ID FROM USERS")) {
+    if (!sqlQuery.exec("SELECT FIO, reg_date, ID FROM USERS")) {
         qDebug() << "Query exec error:" << sqlQuery.lastError().text();
         return QList<QObject *>();
     }
@@ -176,7 +198,7 @@ QList<QObject *> MySQLProvider::getUsers(QString connectionName)
         // FROM USERS
 
         QString fio = sqlQuery.value("FIO").toString();
-        QString date = sqlQuery.value("DATE").toDateTime().toString("dd.MM.yyyy hh:mm:ss");
+        QString date = sqlQuery.value("reg_date").toDateTime().toString("dd.MM.yyyy hh:mm:ss");
         int idUser = sqlQuery.value("ID").toUInt();
         resultList.append(new TestModel(fio, date, idUser));
         //qDebug() << sqlQuery.value("FIO").toString();
