@@ -9,6 +9,8 @@ Page {
     property alias userFIO: fio.text
     property alias userDate: date.text
     property alias userID: idUser.text
+    property string connectionName
+    property int dbType
     function functionUserData(fio, date_, id){
         //console.log(fio, date_, id)
         userFIO = fio
@@ -73,11 +75,11 @@ Page {
             Layout.fillWidth: true
             text: "Обновить"
             onClicked: {
-                var UpdateString = "UPDATE Users SET FIO ="
-                UpdateString += "'" + fio.text + "'" + ", "
-                UpdateString += "reg_date = str_to_date('" + date.text + "', '%d.%m.%Y')"
-                UpdateString += "WHERE id_ = " + idUser.text
-                mySqlProvider.connect(connectionName)
+                var updateString = "UPDATE Users SET FIO ="
+                updateString += "'" + fio.text + "'" + ", "
+                updateString += "reg_date = '" + date.text + "'"
+                updateString += "WHERE ID = " + idUser.text
+                mySqlProvider.connect(dbType,connectionName)
                 mySqlProvider.execUpdateSqlQuery(updateString, connectionName)
                 mySqlProvider.disconnect(connectionName)
             }

@@ -198,7 +198,7 @@ QList<QObject *> MySQLProvider::getUsers(QString connectionName)
         // FROM USERS
 
         QString fio = sqlQuery.value("FIO").toString();
-        QString date = sqlQuery.value("reg_date").toDateTime().toString("dd.MM.yyyy hh:mm:ss");
+        QString date = sqlQuery.value("reg_date").toString();
         int idUser = sqlQuery.value("ID").toUInt();
         resultList.append(new TestModel(fio, date, idUser));
         //qDebug() << sqlQuery.value("FIO").toString();

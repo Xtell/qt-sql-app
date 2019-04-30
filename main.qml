@@ -14,6 +14,18 @@ ApplicationWindow {
 
     property string connectionName: "MyConnection"
     property int dbType: MySQLProvider.DB_TYPE_SQLITE
+    Item {
+      focus: true
+      Keys.onUpPressed: {
+      userPage.pixelSize += 1
+      }
+      Keys.onDownPressed: {
+      userPage.pixelSize -= 1
+      }
+    }
+
+
+
     MySQLProvider {
         id: mySqlProvider
         dbName: "gfgdf.sqlite"
@@ -82,6 +94,8 @@ ApplicationWindow {
         UpdateUserPage {
            id: updateUserPage
            mySqlProvider: mySqlProvider
+           connectionName: mainWindow.connectionName
+           dbType: mainWindow.dbType
         }
 
         CreateTablePage{
