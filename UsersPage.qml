@@ -16,9 +16,38 @@ Page {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
+
+        Button {
+            id: deleteButton
+            Layout.fillWidth: true
+            text: "Удалить"
+            font.pixelSize: root.pixelSize
+            onClicked: {
+                console.log('Удаляем отмеченные строки')
+
+                for (var i = 0; i < visualModel.items.count; ++i){
+                    console.log(JSON.stringify(visualModel.items.get(i).inSelected))
+                   // visualModel.remove(i)
+           if (visualModel.items.get(i).inSelected === true) {
+               // Удалить строку
+               //visualModel.removeRow(visualModel.items[i])
+           }
+
+
+                }
+            }
+        }
+
+
         RowLayout {
             Layout.fillWidth: true
 //                    height: 100
+
+
+            CheckBox {
+            id: deleteAll
+            checked: false
+            }
             Rectangle {
                 Layout.fillWidth: true
                 height: root.pixelSize * 1.25
@@ -81,6 +110,10 @@ Page {
             model: DelegateModel {
                 id: visualModel
 
+                groups: [
+                    DelegateModelGroup { name: "selected" }
+                ]
+
                 delegate: DropArea {
                     id: delegateRoot
                     height: tableContent.pixelSize * 1.25
@@ -137,6 +170,14 @@ Page {
 
                     ]
 
+                    CheckBox {
+                        id: deleteCheckBox
+                        checked: false
+                        onCheckedChanged: {
+                            delegateRoot.DelegateModel.inSelected = checked
+
+                        }
+                    }
 
                         Rectangle {
     //                                width: 70

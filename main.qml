@@ -8,7 +8,7 @@ import MySQLProvider 1.0
 ApplicationWindow {
     id: mainWindow
     visible: true
-    width: 640
+    width: 800
     height: 480
     title: qsTr("Hello World")
 
