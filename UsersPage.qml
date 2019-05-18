@@ -25,13 +25,19 @@ Page {
             onClicked: {
                 console.log('Удаляем отмеченные строки')
 
-                for (var i = 0; i < visualModel.items.count; ++i){
-                    console.log(JSON.stringify(visualModel.items.get(i).inSelected))
+                for (var i = visualModel.items.count-1; i >= 0; --i){
+
+                   // console.log(JSON.stringify(visualModel.items.get(i).inSelected))
                    // visualModel.remove(i)
-           if (visualModel.items.get(i).inSelected === true) {
-               // Удалить строку
-               //visualModel.removeRow(visualModel.items[i])
-           }
+                   if (visualModel.items.get(i).inSelected === true) {
+
+                       var deleteString = "DELETE FROM Users "
+                       deleteString += "WHERE ID = " + visualModel.items.get(i).model.modelData.idUser
+                       mySqlProvider.connect(dbType,connectionName)
+                       mySqlProvider.execUpdateSqlQuery(deleteString, connectionName)
+                       mySqlProvider.disconnect(connectionName)
+                       visualModel.items.remove(i)
+                   }
 
 
                 }
@@ -120,9 +126,13 @@ Page {
                     width: parent.width
 
                     onEntered: {
-
-
+                        console.log(drag.source.visualIndex, line.visualIndex)
                         visualModel.items.move(drag.source.visualIndex, line.visualIndex)
+
+                        var tmp = visualModel.model[drag.source.visualIndex]
+                       // visualModel.move(1,0);
+                        visualModel.model[drag.source.visualIndex] = visualModel.model[line.visualIndex]
+                        visualModel.model[line.visualIndex] = tmp
                     }
 
                     property int visualIndex: DelegateModel.itemsIndex

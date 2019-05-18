@@ -45,6 +45,7 @@ public slots:
     int execSelectSqlQuery(QString query, QString connectionName);
     void execInsertSqlQuery(QString query, QString connectionName);
     void execUpdateSqlQuery(QString query, QString connectionName);
+    void execDeleteSqlQuery(QString query, QString connectionName);
     QList<QObject *> getUsers(QString connectionName);
 
 private:

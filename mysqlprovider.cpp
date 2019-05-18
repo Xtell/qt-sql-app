@@ -182,6 +182,19 @@ void MySQLProvider::execUpdateSqlQuery(QString query, QString connectionName)
     sqlQuery.finish();
 }
 
+void MySQLProvider::execDeleteSqlQuery(QString query, QString connectionName)
+{
+    qDebug() << query;
+    QSqlQuery sqlQuery(QSqlDatabase::database(connectionName));
+    if (!sqlQuery.exec(query)) {
+        qDebug() << "Query exec error:" << sqlQuery.lastError().text();
+        return;
+    }
+
+
+    sqlQuery.finish();
+}
+
 QList<QObject *> MySQLProvider::getUsers(QString connectionName)
 {
     QSqlQuery sqlQuery(QSqlDatabase::database(connectionName));
